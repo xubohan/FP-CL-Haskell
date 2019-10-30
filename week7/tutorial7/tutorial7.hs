@@ -104,15 +104,16 @@ arrowhead x = f x
 
 -- 6. snowflake
 snowflake :: Int -> Command
-snowflake x = f x
+snowflake x = f x :#: n :#: n :#: f x :#:
+              n :#: n :#: f x :#: n :#: n 
    where
      f 0 = GrabPen red :#: Go 10
-     f x = f (x - 1) :#: n :#: n :#: f (x - 1) :#:
-           n :#: n :#: f (x - 1) :#: n :#: n 
+     f x = f (x -1) :#: p :#: f (x -1) :#: n :#:
+           n :#: f (x -1) :#: p :#: f (x -1)
      n = Turn 60
      p = Turn (-60)
 
---pathExample = snowflake 5
+pathExample = snowflake 5
 -- 7. hilbert
 hilbert :: Int -> Command
 hilbert x = l x 
@@ -124,11 +125,11 @@ hilbert x = l x
      r 0 = GrabPen red :#: Go 10
      r x = n :#: l (x - 1) :#: f :#: p :#: r (x-1) :#: 
            f :#: r (x-1) :#: p :#: f :#: l (x-1) :#: n
-     f = Go 10
+     f = Go 100
      n = Turn 90
      p = Turn (-90)
      
-pathExample = hilbert 5
+--pathExample = hilbert 5
 --------------------------------------------------
 --------------------------------------------------
 ---------------- Optional Material ---------------
