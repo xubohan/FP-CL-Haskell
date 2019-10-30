@@ -8,7 +8,8 @@
 import LSystem
 import Test.QuickCheck
 
-pathExample = (Go 30 :#: Turn 120 :#: Go 30 :#: Turn 120 :#:  Go 30)
+
+--pathExample = (Go 30 :#: Turn 120 :#: Go 30 :#: Turn 120 :#:  Go 30)
 
 -- 1a. split
 split :: Command -> [Command]
@@ -88,18 +89,46 @@ optimise x = filter0 $ Go (sum[ valueGo a |a <- split x]) :#: Turn (sum [valueTu
 
 -- 5. arrowhead
 arrowhead :: Int -> Command
-arrowhead = undefined
+arrowhead x = f x
+    where 
+      f 0 = GrabPen red :#: Go 10
+      f x = g (x - 1) :#: p :#: f (x - 1) :#: 
+            p :#: g (x - 1)
+      g 0 = GrabPen blue :#: Go 10
+      g x = f (x - 1) :#: n :#: g (x - 1) :#:
+            n :#: f (x - 1)
+      n   = Turn 60
+      p   = Turn (-60)
 
+--pathExample = arrowhead 10
 
 -- 6. snowflake
 snowflake :: Int -> Command
-snowflake = undefined
+snowflake x = f x
+   where
+     f 0 = GrabPen red :#: Go 10
+     f x = f (x - 1) :#: n :#: n :#: f (x - 1) :#:
+           n :#: n :#: f (x - 1) :#: n :#: n 
+     n = Turn 60
+     p = Turn (-60)
 
-
+--pathExample = snowflake 5
 -- 7. hilbert
 hilbert :: Int -> Command
-hilbert = undefined
-
+hilbert x = l x 
+   where 
+     l 0 = GrabPen blue :#: Go 10
+     l x = p :#: r (x - 1) :#: f :#: n :#:
+           l (x - 1) :#: f :#: l (x - 1) :#: 
+           n :#: f :#: r (x - 1) :#: p
+     r 0 = GrabPen red :#: Go 10
+     r x = n :#: l (x - 1) :#: f :#: p :#: r (x-1) :#: 
+           f :#: r (x-1) :#: p :#: f :#: l (x-1) :#: n
+     f = Go 10
+     n = Turn 90
+     p = Turn (-90)
+     
+pathExample = hilbert 5
 --------------------------------------------------
 --------------------------------------------------
 ---------------- Optional Material ---------------
