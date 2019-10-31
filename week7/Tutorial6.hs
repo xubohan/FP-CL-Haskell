@@ -24,7 +24,8 @@ eachCityHasAColour colouring =
   and [ or[colouring city paint | paint <- colours ] | city <- cities ]
 
 adjacentCitiesNotSameColour :: Colouring -> Bool
-adjacentCitiesNotSameColour paint = undefined
+adjacentCitiesNotSameColour paint = and[ or [not(paint a c) ||
+  not(paint b c)] | a <- cities, b <- cities, adj a b, c <- colours ]
   
 
 -- the code below allows you to use quickCheck to search for
@@ -82,8 +83,10 @@ formalEachCityHasColour =
   And [ Or [ P (Paint city colour) | colour <- colours ] | city <- cities ]
 
 formalAdjacentCitiesNotSameColour :: Form Paint
-formalAdjacentCitiesNotSameColour = undefined
-
+formalAdjacentCitiesNotSameColour = And[ Or [N (Paint a c), N (Paint b c)] | 
+  a <- cities, b <- cities, adj a b, c <- colours ]
+  
+colourings = simple (formalEachCityHasColour <&&> formalAdjacentCitiesNotSameColour)
 ----------------------------
 (<<) :: Eq a => [Clause a] -> Literal a -> [Clause a] 
 cs << x = [ Or (delete (neg x) ys) | Or ys <- cs, not $ x `elem` ys ]
@@ -120,20 +123,26 @@ latin n =
       digits  = [1..n]
       everyRowHasEveryDigit =
         And[ Or[ P (r,c,d) | c <- columns ]
-             | r <- rows, d <- digits]
-      everyColumnHasEveryDigit = undefined
+           | r <- rows, d <- digits]
+      everyColumnHasEveryDigit = 
+        And[ Or[ P (r,c,d) | r <- rows] 
+           | c <- columns, d <- digits]
       noSquareHasTwoDigits =
         And[ Or[ N (r, c, d), N (r, c, d') ]
            | r <- rows, c <- columns,
              d <- digits, d' <- digits, d < d']
-      noRowHasARepeatedDigit = undefined
-      noColumnHasARepeatedDigit = undefined
+      noRowHasARepeatedDigit = 
+        And[ Or [N (r, c, d) | c <- columns]
+           | r <- rows, d <- digits]
+      noColumnHasARepeatedDigit = 
+        And[ Or [N (r, c, d) | r <- rows]
+           | c <- columns, d <- digits]
   in everyRowHasEveryDigit    
      <&&>everyColumnHasEveryDigit 
      <&&>noSquareHasTwoDigits     
      <&&>noRowHasARepeatedDigit   
      <&&>noColumnHasARepeatedDigit 
- 
+
 
 dpll :: Ord a => Form a -> [Val a]
 dpll (And cs) =
@@ -147,7 +156,9 @@ dpll (And cs) =
           [ neg x : m | m <- models $ cs << neg x]
   in
    models (canonical cs)
-  where prioritise = id
+  where 
+    --prioritise :: [Clause a] -> [Clause a]
+    prioritise = id
 
 -- this is for you to play with faster versions
 speedy :: Eq a => Form a -> [[Literal a]]
