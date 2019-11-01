@@ -271,16 +271,18 @@ canonical (And cs) = (And . uniqueSort) $
 wffToForm :: Ord a => Wff a -> Form a
 wffToForm = canonical.toForm.toCNFList where
   toForm :: [[Wff a]] -> Form a
-  toForm              = undefined
-  toClause            = undefined
-  toLit (Not(V a) )   = undefined
-  toLit (V a)         = undefined
+  toForm x            = And (map toClause x)
+  toClause x          = Or (map toLit x)
+  toLit (Not(V a) )   = N a
+  toLit (V a)         = P a
   toLit _             = error "expected Literal"
 
 -- 2: Use quickCheck to check that a Wff is satisfiable
 -- iff the corresponding Form it has a model
-prop_form_equiv wff = undefined
+prop_form_equiv wff = satisfiable wff == determine(dpll(wffToForm wff))
 
+determine a = length(a) > 0 
+          
 ----------------------------
 (<<) :: Eq a => [Clause a] -> Literal a -> [Clause a] 
 cs << x = [ Or (delete (neg x) ys) | Or ys <- cs, not $ x `elem` ys ]
@@ -309,7 +311,9 @@ tseytinToForm p =
       tt r@(a :&: b)   =
         [ Or[P r, N a, N b], Or[N r, P a]
         , Or[N r, P b]] ++ tt a ++ tt b
-      tt r@(a :|: b)   = undefined
+      tt r@(a :|: b)   = 
+        [ Or[N r, P a, P b], Or[P r, N a]
+        , Or[P r, N b]] ++ tt a ++ tt b
       tt r@(a :->:  b) = undefined
       tt r@(a :<->: b) = undefined
       tt F             = [Or[N F]] -- we must make F False

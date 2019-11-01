@@ -174,9 +174,24 @@ branch x = g x
       p = Turn (-22.5)
       n = Turn 22.5
       
-pathExample = branch 8
+--pathExample = branch 8
 
-thirtytwo = undefined
+thirtytwo x = f x :#: p :#: f x :#: p :#: f x :#: p :#: f x
+   where 
+      f 0 = GrabPen blue :#: Go 10
+      f x = n :#: f (x-1) :#: p :#: f (x-1) :#: n :#: f (x-1) :#: 
+            n :#: f (x-1) :#: p :#: f (x-1) :#: p :#: f (x-1) :#:
+            f (x-1) :#: n :#: f (x-1) :#: p :#: f (x-1) :#: p :#:
+            f (x-1) :#: f (x-1) :#: p :#: f (x-1) :#: n :#: f (x-1) :#:
+            n :#: f (x-1) :#: f (x-1) :#: p :#: f (x-1) :#: f (x-1) :#: 
+            n :#: f (x-1) :#: f (x-1) :#: p :#: f (x-1) :#: p :#: f (x-1) :#:
+            n :#: f (x-1) :#: f (x-1) :#: n :#: f (x-1) :#: n :#: f (x-1) :#:
+            p :#: f (x-1) :#: f (x-1) :#: n :#: f (x-1) :#: n :#: f (x-1) :#: 
+            p :#: f (x-1) :#: p :#: f (x-1) :#: n :#: f (x-1) :#: p
+      n = Turn (90)
+      p = Turn (-90)
+
+pathExample = thirtytwo 3
 
 main :: IO ()
 main = display pathExample
