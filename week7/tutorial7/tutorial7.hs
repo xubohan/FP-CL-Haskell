@@ -65,8 +65,9 @@ polygon ds a = copy a (Go ds :#: Turn abc)
 -- 3. spiral
 spiral :: Distance -> Int -> Distance -> Angle -> Command
 spiral side 0 step angle = Sit
+spiral 0 n step angle = Sit
 spiral side n step angle 
-     | side >= 0 && 
+     | side > 0 && 
        step >= 0 = eliminateSit $ (Go side :#: Turn angle) :#:  spiral (side + step) (n-1) step angle
      | otherwise = error "Side and Step are negative numbers"
 
