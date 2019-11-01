@@ -39,7 +39,12 @@ equivalent a b = split a == split b
 prop_split_join c = join (split c) == c
 
 -- prop_split
-prop_split c = undefined
+prop_split c = and[casesplit x | x <- split c]
+      where 
+        casesplit x = case x of 
+                      Sit -> False
+                      x :#: _ -> False
+                      _ -> True
 
 -- 2a. copy
 copy :: Int -> Command -> Command
