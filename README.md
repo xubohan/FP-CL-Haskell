@@ -1,2 +1,2 @@
 # WFH
- UoE haskell homework(CL & FP)
+ University of Edinburgh, haskell homework(CL & FP)
