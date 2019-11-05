@@ -280,8 +280,8 @@ wffToForm = canonical.toForm.toCNFList where
 -- 2: Use quickCheck to check that a Wff is satisfiable
 -- iff the corresponding Form it has a model
 prop_form_equiv wff = satisfiable wff == determine(dpll(wffToForm wff))
-
-determine a = length(a) > 0 
+  where
+  determine a = length(a) > 0 
           
 ----------------------------
 (<<) :: Eq a => [Clause a] -> Literal a -> [Clause a] 
@@ -314,8 +314,13 @@ tseytinToForm p =
       tt r@(a :|: b)   = 
         [ Or[N r, P a, P b], Or[P r, N a]
         , Or[P r, N b]] ++ tt a ++ tt b
-      tt r@(a :->:  b) = undefined
-      tt r@(a :<->: b) = undefined
+      tt r@(a :->:  b) = 
+        [ Or[N r, N a, P b], Or[P r, P a]
+        , Or[P r, N b]] ++ tt a ++ tt b
+      tt r@(a :<->: b) = 
+        [ Or[N r, N a, P b], Or[N r, P a, N b]
+        , Or[P r, P a, P b], Or[P r, N a, N b]] 
+        ++ tt a ++ tt b
       tt F             = [Or[N F]] -- we must make F False
       tt T             = [Or[P T]] -- we must make T True
       tt (V _)         = [] -- no further constraints
@@ -333,8 +338,8 @@ prop_tseytin_equiv wff = satisfiable wff /= null (dpll (tseytinToForm wff))
 -- by replacing each occurrence of undefined
 -- the name of our proposition gives a hint :-)
 prop_tseytin_bigger :: Wff Atom -> Bool
-prop_tseytin_bigger wff = undefined
-  where size (And cs) = undefined
+prop_tseytin_bigger wff = size (wffToForm wff) < 10 * size (tseytinToForm wff)
+  where size (And cs) = length $ dpll(And cs)
 
 ---------------------------------------------------------------------
 -- For QuickCheck --------------------------------------------------------
