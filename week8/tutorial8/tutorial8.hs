@@ -38,31 +38,75 @@ testDB = fromList [
 -- Exercise 1
 
 longestProductLen :: [(Barcode, Item)] -> Int
-longestProductLen = undefined
+longestProductLen x = maximum [ numbers [y] | y <- x]
+    where
+      numbers :: [(Barcode, Item)] -> Int
+      numbers [(a,(b,c))] = length b
 
 formatLine :: Int -> (Barcode, Item) -> String
-formatLine = undefined
+formatLine x (a,(b,c))
+            | length b == x   = a ++ "..." ++ b ++ "..." ++ c
+            | otherwise       = a ++ "..." ++ b ++ 
+                                replicate (x - length b)'.' 
+                                ++ "..." ++ c
 
 showCatalogue :: Catalogue -> String
-showCatalogue = undefined
+showCatalogue x =  sC toListx
+      where
+        toListx = toList x
+        showUnit (a,(b,c)) = "[("++ a ++ "," ++ b ++ 
+                               "," ++ c ++ ")]"
+        sC [] = []
+        sC (y:ys) = showUnit y ++ sC ys
      
 -- Exercise 2
+
+--get "9780201342758" testDB
+--Just ("Thompson - \"Haskell: The Craft of Functional Programming\"","Book")
+--get "000" testDB
+--Nothing
+
 maybeToList :: Maybe a -> [a]
-maybeToList = undefined
+maybeToList x = case x of 
+  Nothing -> []
+  Just a  -> [a]
 
 listToMaybe :: [a] -> Maybe a
-listToMaybe = undefined
+listToMaybe x = case x of 
+  []      -> Nothing
+  str     -> Just (head str)
 
 catMaybes :: [Maybe a] -> [a]
-catMaybes = undefined
+catMaybes [] = []
+catMaybes (x:xs) = maybeToList x ++ catMaybes xs
 
 -- Exercise 3
 
 getItems :: [Barcode] -> Catalogue -> [Item]
-getItems = undefined
+getItems []   str = [] 
+getItems (x:xs) str = maybeToList (lookup x (toList str)) 
+                      ++ getItems xs str
+  
+-- Wrong codes  
+--let store = (toList str)
+--in  case (lookup x store) of
+    --Nothing -> [] ++ getItems xs
+    --Just a  -> [a] ++ getItems xs
+                       
+                
 
 
 -- Exercise 4
+
+--Tutorial8> theDB <- readDB
+--(0.73 secs, 874,802,800 bytes)
+
+--Tutorial8> getSample theDB
+--"0026392059549"
+--(0.01 secs, 138,408 bytes)
+--Tutorial8> get it theDB
+--Just ("XMAS DESIGNER TINS 2PC SET","EACH")
+--(0.02 secs, 7,873,856 bytes)
  
 -- For Exercises 6-10 check KeymapTree.hs 
 
