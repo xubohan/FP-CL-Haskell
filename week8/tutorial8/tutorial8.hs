@@ -10,8 +10,7 @@ import System.Random
 
 -- Importing the keymap module
 
-import KeymapList
-
+import KeymapTree
 
 -- Type declarations
 
@@ -93,9 +92,7 @@ getItems (x:xs) str = maybeToList (lookup x (toList str))
     --Nothing -> [] ++ getItems xs
     --Just a  -> [a] ++ getItems xs
                        
-                
-
-
+  
 -- Exercise 4
 
 --Tutorial8> theDB <- readDB
@@ -110,7 +107,20 @@ getItems (x:xs) str = maybeToList (lookup x (toList str))
  
 -- For Exercises 6-10 check KeymapTree.hs 
 
+--Tutorial8> theDB <- readDB
+--(4.09 secs, 1,957,021,584 bytes)
+--Tutorial8> getSample theDB
+--"0681131435543"
+--(0.12 secs, 99,849,176 bytes)
+--Tutorial8> get it theDB
+--Just ("Member's Mark Advanced Multi Vitamin","210 Tablets")
+--(0.06 secs, 68,906,848 bytes)
+
 -- Exercise 12
+--filterLT :: Barcode -> [(Barcode, Item)] -> [(Barcode, Item)]
+--filterLT code ((k, b):xs)  
+    --           code <= k  = (k,b) : filterLT code xs
+    --           otherwise  = filterLT code xs
 
 -- Input-output ------------------------------------------
 

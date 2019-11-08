@@ -40,12 +40,15 @@ size Leaf = 0
 size (Node _ _ left right) = 1 + size left + size right
 
 depth :: Ord k => Keymap k a -> Int
-depth = undefined
+depth Leaf = 0
+depth (Node _ _ left right) = 1 + (depth left `max` depth right)
 
 -- Exercise 7
 
 toList :: Ord k => Keymap k a -> [(k,a)]
-toList = undefined
+toList str = case str of 
+      Leaf   ->  []
+      Node k a l r -> toList l ++ [(k,a)] ++ toList r
 
 -- Exercise 8
 
@@ -54,13 +57,15 @@ set key value = f
     where
       f Leaf = Node key value Leaf Leaf
       f (Node k v left right) | key == k  = Node k value left right
-                              | key <= k  = undefined
-                              | otherwise = undefined
+                              | key <= k  = Node k v (f(left)) right
+                              | otherwise = Node k v left (f(right))
+
 
 -- Exercise 9
 
 get :: Ord k => k -> Keymap k a -> Maybe a
-get = undefined
+get key map = lookup key (toList map) 
+    
 
 prop_set_get :: Int -> Int -> Bool
 prop_set_get k v = get k (set k v testTree) == Just v
@@ -68,7 +73,7 @@ prop_set_get k v = get k (set k v testTree) == Just v
 -- Exercise 10
 
 fromList :: Ord k => [(k,a)] -> Keymap k a
-fromList = undefined
+fromList str = foldr (uncurry (set)) Leaf str 
 
 
 prop_toList_fromList :: [Int] -> [Int] -> Bool
@@ -86,10 +91,21 @@ prop_toList_fromList_sorted xs ys = toList (fromList zs) == sort zs
 -- Exercise 13
 
 filterLT :: Ord k => k -> Keymap k a -> Keymap k a
-filterLT = undefined
+filterLT key = f
+      where
+        f Leaf = Leaf
+        f (Node k v l r) 
+                | key <= k    =  f l
+                | otherwise   =  Node k v l (f(r))
+                               
 
 filterGT :: Ord k => k -> Keymap k a -> Keymap k a
-filterGT = undefined
+filterGT key = f
+        where
+          f Leaf = Leaf
+          f (Node k v l r)
+                  | key >= k  = f r
+                  | otherwise = Node k v (f(l)) r
 
 -- Exercise 14
 
