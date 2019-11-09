@@ -50,13 +50,19 @@ formatLine x (a,(b,c))
                                 ++ "..." ++ c
 
 showCatalogue :: Catalogue -> String
-showCatalogue x =  sC toListx
+showCatalogue x = sC toListx
       where
         toListx = toList x
         showUnit (a,(b,c)) = "[("++ a ++ "," ++ b ++ 
                                "," ++ c ++ ")]"
         sC [] = []
         sC (y:ys) = showUnit y ++ sC ys
+
+--In this part, we can use unlines Funtions in the library.
+--unlines :: [String] -> String 
+--unlines is an inverse operation to lines. It joins lines, after appending a terminating newline to each.
+--unlines ["Hello", "World", "!"]
+--"Hello\nWorld\n!\n"
      
 -- Exercise 2
 
@@ -78,6 +84,8 @@ listToMaybe x = case x of
 catMaybes :: [Maybe a] -> [a]
 catMaybes [] = []
 catMaybes (x:xs) = maybeToList x ++ catMaybes xs
+--foldr maybe okay for this part?? soon, I will try to implement it.
+
 
 -- Exercise 3
 
