@@ -111,12 +111,15 @@ dfinal fsm q = [ num | fs <- final fsm, num <- q, fs `elem` num]
 
 -- 9.
 dtrans :: (Ord q) => FSM q -> [[q]] -> [Transition [q]]
-dtrans = undefined
-
+dtrans fsm q = [(x, y, ddelta fsm x y)|x <- q, y <- alph fsm]
 
 -- 10.
 deterministic :: (Ord q) => FSM q -> FSM [q]
-deterministic = undefined
+deterministic fsm = (sort $ reachable fsm [start fsm],
+                     alph fsm,
+                     [start fsm],
+                     dfinal fsm (sort $ reachable fsm [start fsm]),
+                     dtrans fsm (sort $ reachable fsm [start fsm]))
 
 
 -- Optional Material
