@@ -88,25 +88,26 @@ acceptsFrom m q (x:xs) = acceptsFrom m (delta m q x) xs
 
 -- 4.
 canonical :: (Ord q) => [q] -> [q]
-canonical = undefined
+canonical x = nub $ sort x 
 
 
 -- 5.
 ddelta :: (Ord q) => FSM q -> [q] -> Char -> [q]
-ddelta = undefined
+ddelta r y x = canonical $  delta r y x
 
 -- 6.
 next :: (Ord q) => FSM q -> [[q]] -> [[q]]
-next = undefined
-
+next fsm x = canonical $ x ++[ ddelta fsm a r| r <- alph fsm, a <- x] 
 
 -- 7.
 reachable :: (Ord q) => FSM q -> [[q]] -> [[q]]
-reachable = undefined
+reachable fsm q 
+      | q /= next fsm q  = nub $ next fsm q ++ reachable fsm (next fsm q)
+      | otherwise = []
 
 -- 8.
 dfinal :: (Ord q) => FSM q -> [[q]] -> [[q]]
-dfinal = undefined
+dfinal fsm q = [ num | fs <- final fsm, num <- q, fs `elem` num]
 
 -- 9.
 dtrans :: (Ord q) => FSM q -> [[q]] -> [Transition [q]]
