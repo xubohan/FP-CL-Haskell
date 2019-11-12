@@ -54,18 +54,19 @@ accepts fsm (x : xs) = accepts (step fsm x) xs
 
 charFSM :: Char -> FSM Bool
 charFSM c =
-  mkFSM [False,True] [c] undefined undefined undefined
+  mkFSM [False,True] [c] [(False,c,False),(True, c, True),
+        (False, c, True), (True, c, False)] [False] [True]
 
 stringFSM :: String -> FSM Int
 stringFSM xs =
-  mkFSM [0..n] xs undefined [0] [n]
+  mkFSM [0..n] xs [(0,xs!!7,7)] [0] [n]
   where n = length xs
 
 emptyFSM :: FSM Int
-emptyFSM = undefined
+emptyFSM = FSM [0] "" [(0,' ',0)] [0] [0]
 
 nullFSM :: FSM ()
-nullFSM = FSM undefined undefined undefined undefined undefined
+nullFSM = FSM [()] "" [] [()] [()]
 
 -- Q 4.
 
@@ -75,17 +76,20 @@ simpleFSM = mkFSM qs as ts ss fs
  where
    qs = [Q0,Q1,Q2]
    as = [a,b,c,d]
-   ts = undefined
-   ss = undefined
-   fs = undefined
+   ts = [(Q0,a,Q1), (Q1,b,Q1),(Q1,c,Q2),(Q1,d,Q2)]
+   ss = [Q0]
+   fs = [Q2]
 
 simpleFSMbh = mkFSM qs as ts ss fs
  where
    qs = [Q0,Q1,Q2,Q3]
    as = [a,b,c,d]
-   ts = undefined
-   ss = undefined
-   fs = undefined
+   ts = [(Q0,a,Q1),(Q1,b,Q1),(Q1,c,Q2),(Q1,d,Q2),
+         (Q1,a,Q3),(Q0,b,Q3),(Q0,c,Q3),(Q0,d,Q3),
+         (Q2,a,Q3),(Q2,b,Q3),(Q2,c,Q3),(Q2,d,Q3),
+         (Q3,a,Q3),(Q3,b,Q3),(Q3,c,Q3),(Q3,d,Q3)]
+   ss = [Q0]
+   fs = [Q2]
 
 -- Q 5
 eg1 = mkFSM [0..8] as
@@ -95,53 +99,65 @@ eg1 = mkFSM [0..8] as
   where as@[a,b,c,d,e,g,h,i,o,t]="abcdeghiot"
 
 muWords = mkFSM [0..8] as
-  undefined undefined undefined
-  where as@[a,b,c,d,e,g,h,i,o,t]="abcdeghiot" -- edit this as required
+  [(0,b,2),(2,u,1),(0,a,3),(3,h,6),(3,c,1),
+   (6,k,9),(9,d,8),(8,i,5),(6,m,7),(8,o,7),
+   (7,g,4),(1,t,4),(4,e,5)] [0,2,3,9] [1,4]
+  where as@[a,b,c,d,e,g,h,i,o,t,u,k,m]="abcdeghiotukm" -- edit this as required
+  --only inputs "dog,act,but"
 
 -- Q 6
 
 eg5i = mkFSM
        [0..5]
        "ab"
-       undefined
-       undefined
-       undefined
+       [(0,a,1),(1,b,3),(3,b,4),
+        (4,a,5),(5,a,1),(5,b,3)]
+       [0]
+       [4]
 
 eg5ii = mkFSM
-       [0..5]
-       "ab"
-       undefined
-       undefined
-       undefined
+        [0..5]
+        "ab"
+        [(0,a,1),(1,b,3),(3,b,4),
+        (4,a,5),(1,a,5),(5,b,3)]
+        [0]
+        [4]
 
 eg5iii = mkFSM
        [0..5]
        "ab"
-       undefined
-       undefined
-       undefined
+       [(0,a,1),(1,b,3),(3,b,4),
+        (4,a,5),(5,a,1),(5,a,3)]
+        [0]
+        [1,4]
 
 eg5iv = mkFSM
        [0..5]
        "ab"
-       undefined
-       undefined
-       undefined
+       [(0,a,1),(1,b,3),(3,b,4),
+        (4,a,5),(5,a,3),(5,a,1)]
+       [0,5]
+       [1,4]
 
 eg5v = mkFSM
        [0..5]
        "ab"
-       undefined
-       undefined
-       undefined
+       [(0,a,1),(1,b,3),(3,b,4),
+        (4,a,5),(5,b,1),(5,a,3),(4,b,4)]
+        [0]
+        [1]
+       
 
 eg5vi = mkFSM
        [0..5]
        "ab"
-       undefined
-       undefined
-       undefined
+       [(0,b,1),(1,a,3),(3,b,4),
+        (4,b,4),(4,a,5),(5,a,1)]
+       [0]
+       [1]
 
+
+        
 -- Q 9
 reverseFSM :: Ord q => FSM q -> FSM q
 reverseFSM (FSM qs as ts ss fs) =
