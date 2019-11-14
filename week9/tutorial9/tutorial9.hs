@@ -132,10 +132,18 @@ safeString a = filter (`elem` ['a'..'z']) (map toLower a)
 --11.
 
 charFSM :: Char -> FSM Bool
-charFSM = undefined
+charFSM x = ([True, False], 
+             [x], 
+             [True], 
+             [False], 
+             [(q,a,q')| q<-[True, False], a <- [x], q' <- [True, False]])
 
 emptyFSM :: FSM ()
-emptyFSM = undefined
+emptyFSM = ([],
+            "",
+            [],
+            [],
+            [])
 
 --12.
 
