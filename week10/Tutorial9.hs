@@ -472,3 +472,4 @@ prop_invariantFSM (FSM qs as ts ss fs) =
 
 
 
+prop_reach111 x y= (reach (x \\) y )== (reach (x \/) y)

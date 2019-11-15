@@ -93,7 +93,7 @@ canonical x = nub $ sort x
 
 -- 5.
 ddelta :: (Ord q) => FSM q -> [q] -> Char -> [q]
-ddelta r y x = canonical $  delta r y x
+ddelta r y x = canonical $ delta r y x
 
 -- 6.
 next :: (Ord q) => FSM q -> [[q]] -> [[q]]
