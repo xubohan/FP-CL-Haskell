@@ -161,7 +161,7 @@ eg5vi = mkFSM
 -- Q 9
 reverseFSM :: Ord q => FSM q -> FSM q
 reverseFSM (FSM qs as ts ss fs) =
-  mkFSM qs as undefined undefined undefined
+  mkFSM qs as ts ss [a | a<-qs, not (a `elem` fs)]
 
 prop_reverse s = accepts (reverseFSM $ stringFSM s) (reverse s)
 
