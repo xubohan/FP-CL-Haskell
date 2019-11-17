@@ -25,7 +25,7 @@ reach :: Ord q => (Set q -> Set q) -> Set q -> Set q
 reach step qs =
   let add q qss
         | q `member` qss = qss
-        | otherwise = undefined
+        | otherwise = foldr add (insert q qss) (step$ set[q])
          -- foldr add <done> <(todo>
   in foldr add empty qs
 
@@ -37,8 +37,8 @@ type Trans q = (q, Sym, q)
 toy_ts :: [Trans Int]
 toy_ts = [ (n,intToDigit m, m*n `mod` 10) | n <- [0..9], m <- [3,7] ]
 
-smallstep :: Set Int -> Set Int
-smallstep qs = set[ q' | (q,_,q') <- toy_ts, q`member`qs ]  
+smallStep :: Set Int -> Set Int
+smallStep qs = set[ q' | (q,_,q') <- toy_ts, q`member`qs ]  
 
 -- -- 3.
 -- -- oneStep ts qs produces the states reached adjacent to qs
@@ -80,6 +80,7 @@ reverseFSM (FSM qs as ts ss fs) = FSM qs as ts' ss' fs' where
     ss' = undefined
     fs' = undefined
 
+prop_reverseFSM :: String -> Bool
 prop_reverseFSM s = acceptsFSM (reverseFSM $ stringFSM s) (reverse s)
 
 -- -- 7.
