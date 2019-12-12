@@ -1,0 +1,8 @@
+DPLL算法：
+1、如果文字a（正文字或者负文字）在子句c（clause）中出现并且在其它子句中未出现～a，那么删除该子句。删除后所得公式与原公式具有相同的可满足性！
+2、任意选择一个文字b，并且对b赋值“真”（V=｛b｝），删除包含b的子句，并且把所有其余子句中的～b删除。
+3、对只剩余一个文字的子句赋值，使该文字为真（扩大the partial valuationV＝｛b，～C｝）。
+4、如果the partial valuation有矛盾赋值（contradictory valuation），例如V＝｛b,～C,C｝，退回原来的选择（backtrack to the privous choice），重新对文字b赋值V=｛!b｝.
+5、如果已经没有办法回退，则该公式不可满足（unsatisfiable）。
+
+(url: https://ycchenpub.blogspot.com/2008/10/dpll.html)
