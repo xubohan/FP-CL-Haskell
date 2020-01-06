@@ -1,0 +1,83 @@
+-- Informatics 1 Functional Programming
+-- August 2016
+
+import Test.QuickCheck( quickCheck, 
+                        Arbitrary( arbitrary ),
+                        oneof, elements, sized, (==>)  )
+import Control.Monad -- defines liftM, liftM3, used below
+import Data.List
+import Data.Char
+
+-- Question 1
+
+-- 1a
+
+f :: String -> Int
+f = undefined
+
+-- 1b
+
+g :: String -> Int
+g = undefined
+
+-- Question 2
+
+-- 2a
+
+p :: [Int] -> Bool
+p = undefined
+
+-- 2b
+
+q :: [Int] -> Bool
+q = undefined
+
+-- 2c
+
+r :: [Int] -> Bool
+r= undefined
+
+-- Question 3
+
+data Prop = X
+          | F
+          | T
+          | Not Prop
+          | Prop :->: Prop
+          deriving (Eq, Ord)
+
+-- turns a Prop into a string approximating mathematical notation
+
+showProp :: Prop -> String
+showProp X           =  "X"
+showProp F           =  "F"
+showProp T           =  "T"
+showProp (Not p)     =  "(~" ++ showProp p ++ ")"
+showProp (p :->: q)  =  "(" ++ showProp p ++ "->" ++ showProp q ++ ")"
+
+-- For QuickCheck
+
+instance Show Prop where
+    show  =  showProp
+
+instance Arbitrary Prop where
+    arbitrary  =  sized prop
+        where
+          prop n | n <= 0     =  atom
+                 | otherwise  =  oneof [ atom
+                                       , liftM Not subform
+                                       , liftM2 (:->:) subform subform
+                                       ]
+                 where
+                   atom = oneof [elements [X,F,T]]
+                   subform  =  prop (n `div` 2)
+
+-- 3a
+
+eval :: Prop -> Bool -> Bool
+eval = undefined
+
+-- 3 b
+
+simplify :: Prop -> Prop
+simplify = undefined

@@ -1,0 +1,88 @@
+-- Informatics 1 Functional Programming
+-- August 2018
+
+module Aug2018 where
+
+import Test.QuickCheck( quickCheck, 
+                        Arbitrary( arbitrary ), Gen, suchThat,
+                        oneof, elements, sized, (==>) )
+import Control.Monad -- defines liftM, liftM2, liftM3, used below
+import Data.Char
+
+-- Question 1
+
+f :: [String] -> [String]
+f = undefined
+
+g :: [String] -> [String]
+g = undefined
+
+-- Question 2
+
+-- 2a
+
+p :: [String] -> Int
+p = undefined
+
+-- 2b
+
+q :: [String] -> Int
+q = undefined
+
+-- 2c
+
+r :: [String] -> Int
+r = undefined
+
+-- Question 3
+
+data Expr = X                      -- variable X
+          | Y                      -- variable Y
+          | Const Int              -- integer constant
+          | Expr :+: Expr          -- addition
+          | Expr :*: Expr          -- multiplication
+          deriving (Eq, Ord)
+
+-- turns an Expr into a string approximating mathematical notation
+
+showExpr :: Expr -> String
+showExpr X          =  "X"
+showExpr Y          =  "Y"
+showExpr (Const n)  =  show n
+showExpr (p :+: q)  =  "(" ++ showExpr p ++ "+" ++ showExpr q ++ ")"
+showExpr (p :*: q)  =  "(" ++ showExpr p ++ "*" ++ showExpr q ++ ")"
+
+-- For QuickCheck
+
+instance Show Expr where
+    show  =  showExpr
+
+instance Arbitrary Expr where
+    arbitrary  =  sized expr
+        where
+          expr n | n <= 0     =  oneof [ return X
+                                       , return Y
+                                       , liftM Const arbitrary ]
+                 | otherwise  =  oneof [ return X
+                                       , return Y
+                                       , liftM Const arbitrary
+                                       , liftM2 (:+:) subform2 subform2
+                                       , liftM2 (:*:) subform2 subform2
+                                       ]
+                 where
+                   subform2  =  expr (n `div` 2)
+
+-- 3a
+
+eval :: Expr -> Int -> Int -> Int
+eval = undefined
+
+-- 3b
+
+isSimple :: Expr -> Bool
+isSimple = undefined
+
+-- 3c
+
+simplify :: Expr -> Expr
+simplify = undefined

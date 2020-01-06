@@ -1,0 +1,58 @@
+-- Informatics 1 Functional Programming
+-- Final Exam #1 - 7 December 2009
+--
+-- You do not need to put your name in this file
+-- This examination will be marked anonymously
+
+
+import Data.Char
+import Test.QuickCheck
+
+
+-- Question 1
+
+-- 1a
+
+f :: String -> Bool
+f = undefined
+
+-- 1b
+
+g :: String -> Bool
+g = undefined
+
+-- 1c
+
+h :: String -> Bool
+h = undefined
+
+
+-- Question 2
+
+-- 2a
+
+p :: [a] -> [a] -> [a]
+p = undefined
+
+-- 2b
+
+q :: [a] -> [a] -> [a]
+q = undefined
+
+
+-- Question 3
+
+type Point = (Int,Int)
+data Points = Rectangle Point Point
+            | Union Points Points
+            | Difference Points Points
+
+-- 3a
+
+inPoints :: Point -> Points -> Bool
+inPoints = undefined
+
+-- 3b
+
+showPoints :: Point -> Points -> [String]
+showPoints = undefined

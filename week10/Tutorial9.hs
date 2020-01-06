@@ -38,8 +38,9 @@ toy_ts :: [Trans Int]
 toy_ts = [ (n,intToDigit m, m*n `mod` 10) | n <- [0..9], m <- [3,7] ]
 
 smallStep :: Set Int -> Set Int
-smallStep qs = set[ q' | (q,_,q') <- toy_ts, q`member`qs ]  
-
+smallStep qs = set[ q' | (q,_,q') <- toy_ts, q`member`qs ]
+-- smallStep (set [1,3,7,9]) == fromList [1,3,7,9]
+ 
 -- -- 3.
 -- -- oneStep ts qs produces the states reached adjacent to qs
 -- -- then can be reached by a single transition from ts 
@@ -64,7 +65,9 @@ eg1 = g0 [1,2] [9]
 
 -- 4.
 reachableFSM :: Ord q => FSM q -> Set q
-reachableFSM (FSM _ _ ts ss _) = undefined
+reachableFSM (FSM _ _ ts ss _) = reach (oneStep ts) ss
+
+-- eg1 and eg0 return different outcomes
 
 -- 5.
 pruneFSM :: Ord q => FSM q -> FSM q

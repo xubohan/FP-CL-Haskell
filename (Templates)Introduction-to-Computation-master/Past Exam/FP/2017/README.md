@@ -1,0 +1,1 @@
+### [The reference to isInitialism in 2c is superfluous.]

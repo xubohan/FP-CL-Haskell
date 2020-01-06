@@ -1,0 +1,62 @@
+-- Informatics 1 Functional Programming
+-- Resit Exam - 20 August 2010
+--
+-- You do not need to put your name in this file
+-- This examination will be marked anonymously
+
+
+import Data.Char
+import Test.QuickCheck
+
+-- Question 1
+
+-- 1a
+
+f :: String -> Bool
+f =  undefined
+
+-- 1b
+
+g :: String -> Bool
+g =  undefined
+
+-- 1c
+
+h :: String -> Bool
+h =  undefined
+
+
+-- Question 2
+
+-- 2a
+
+p :: a -> [a] -> [a]
+p =  undefined
+
+-- 2b
+
+q :: a -> [a] -> [a]
+q =  undefined
+
+
+
+-- Question 3
+
+type Point  = (Int,Int)
+data Points = X
+            | Y
+            | DX Int Points
+            | DY Int Points
+            | U Points Points
+
+-- 3a
+
+inPoints :: Point -> Points -> Bool
+inPoints =  undefined
+
+-- 3b
+
+countAxes :: Points -> Int
+countAxes =  undefined
+
+

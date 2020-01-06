@@ -1,0 +1,68 @@
+-- Informatics 1 Functional Programming
+-- Resit, August 2012
+
+import Data.Char
+import Test.QuickCheck
+import Control.Monad -- defines liftM, liftM2, used below
+
+-- 1
+
+-- 1a
+
+f :: [String] -> String
+f =  undefined
+
+-- 1b
+
+g :: [String] -> String
+g =  undefined
+
+-- 2
+
+-- 2a
+
+p :: [(Int,Int)] -> Bool
+p =  undefined
+
+-- 2b
+
+q :: [(Int,Int)] -> Bool
+q =  undefined
+
+-- 2c
+
+r :: [(Int,Int)] -> Bool
+r =  undefined
+
+
+-- 3
+
+data Expr = Var String
+          | Const Int
+          | Expr :+: Expr
+          | Expr :*: Expr
+          deriving (Eq, Show)
+
+-- code that enables QuickCheck to generate arbitrary values of type Expr
+
+instance Arbitrary Expr where
+  arbitrary = sized arb
+    where
+    arb 0          =  liftM Var arbitrary
+    arb n | n > 0  =  oneof [liftM Const arbitrary,
+                             liftM Var arbitrary,
+                             liftM2 (:+:) sub sub, 
+                             liftM2 (:*:) sub sub] 
+      where
+      sub = arb (n `div` 2)
+
+-- 3a
+
+isSimple :: Expr -> Bool
+isSimple =  undefined
+
+-- 3b
+
+simplify :: Expr -> Expr
+simplify =  undefined
+

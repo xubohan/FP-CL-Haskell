@@ -1,0 +1,42 @@
+import Test.QuickCheck
+import Char
+
+-- 1a.
+
+f :: [Int] -> Int
+f = undefined
+
+-- 1b.
+
+g :: [Int] -> Int
+g = undefined
+
+-- 1c.
+
+h :: [Int] -> Int
+h = undefined
+
+-- 2a.
+
+p :: Int -> Int -> [Int]
+p = undefined
+
+-- 2b.
+
+r :: [Int] -> [Int]
+r = undefined
+
+-- 2c.
+
+s :: [Int] -> [Int]
+s = undefined
+
+-- 3a.
+
+t :: [Int] -> Int
+t = undefined
+
+-- 3b.
+
+u :: [Int] -> Int
+u = undefined

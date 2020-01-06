@@ -9,6 +9,7 @@ module Tutorial10 where
 
 import Data.List (sort,nub,(\\),transpose,genericLength)
 import Data.String (lines,unlines)
+import Test.QuickCheck
 
 type Row a     =  [a]
 type Col a     =  [a]
@@ -26,27 +27,34 @@ group :: [a] -> [[a]]
 group = groupBy 3
 
 groupBy :: Int -> [a] -> [[a]]
-groupBy  =  undefined
+groupBy a [] = []
+groupBy a str = [take a str] ++ groupBy a (drop a str)
 
 -- 3.
 intersperse :: a -> [a] -> [a]
-intersperse = undefined
+intersperse k [] = [k]
+intersperse k (x:xs) = (k:[x]) ++ intersperse k xs
+           
 
 -- 4.
 showRow :: String -> String
-showRow = undefined
+showRow x = concat(intersperse "|" (group x))
 
 -- 5.
 showGrid :: Matrix Digit -> [String]
-showGrid = undefined
+showGrid []=["-------------"]
+showGrid str= ("-------------":(take 3 str)) ++ showGrid (drop 3 str)  
 
 -- 6.
 put :: Matrix Digit -> IO ()
-put = undefined
+put str= putStrLn $ unlines $ showGrid [ showRow x| x <- str] 
 
 -- 7.
 choices :: Matrix Digit -> Matrix [Digit]
-choices = undefined
+choices str = [repalce $ check x| x <- groupBy 1 str]
+    where 
+      check [a]= groupBy 1 a 
+      repalce str= [ if x == " " then "123456789" else x | x <- str]
 
 -- 8.
 cp :: [[a]] -> [[a]]
@@ -54,20 +62,24 @@ cp []        =  [[]]
 cp (xs:xss)  =  [ x:ys | x <- xs, ys <- cp xss ]
 
 expand :: Matrix [Digit] -> [Matrix Digit]
-expand = undefined
+expand =  cp.map cp
+        
+-- 9.
+prop_checklgth :: Matrix [Digit] -> Bool
+prop_checklgth x = length (expand x) == product(map length x)
 
 -- 11, 12, 13.
--- transpose :: [[a]] -> [[a]]
--- transpose [xs]      =  [[x] | x <- xs]
--- transpose (xs:xss)  =  zipWith (:) xs (transpose xss)
+--transpose :: [[a]] -> [[a]]
+--transpose [xs]      =  [[x] | x <- xs]
+--transpose (xs:xss)  =  zipWith (:) xs (transpose xss)
 
 ungroup :: [[a]] -> [a]
-ungroup =  undefined
+ungroup =  foldr1 (++) 
 
 rows, cols, boxs :: Matrix a -> Matrix a
-rows  =  undefined
-cols  =  undefined
-boxs  =  undefined
+rows a = a
+cols a = transpose a 
+boxs (x:xs) =  undefined
 
 -- 14.
 distinct :: Eq a => [a] -> Bool

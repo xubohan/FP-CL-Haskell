@@ -1,0 +1,1 @@
+### [The solution to 3b is incorrect: equalify F p = Not p should be equalify F p = simplify(Not p), and likewise for equalify p F.]

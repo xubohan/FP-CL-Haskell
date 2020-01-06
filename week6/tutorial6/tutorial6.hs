@@ -86,7 +86,7 @@ infixr 1 :->:
 infixr 0 :<->:
 
  
-data Atom = A|B|C|D|P|Q|R|S|W|X|Y|Z deriving (Eq, Show, Ord)
+data Atom = A|B|C|D|P|Q|R|S|W|X|Y|Z|E deriving (Eq, Show, Ord)
 -- we will use these as propositional letters in examples         
 type Env a = [(a, Bool)]
 
@@ -161,7 +161,9 @@ satisfiable p  =  or [ eval e p | e <- envs (atoms p) ]
 -- 4.
 wff1 = ((V P :|: V Q) :&: (V P :&: V Q))
 wff2 = ((V P :&: (V Q :|: V R)) :&: (Not(V P) :|: Not(V Q)) :&: (Not(V P) :|: Not(V R)))
-
+wff13 = ((V A :|: V B) :&: (Not(V B) :|: V C) :->: (V B :|: V C))
+wff14 = ((V C :->: V D) :&: (V D :->: V X) :&: (V A :->: V C))
+wff15 = ((V A :->: Not(V B)) :&: (V C :->: V B) :&: (Not(V D) :->: V C) :&: (V E :->: Not(V E)) :&: (V X :->: V E))
 -- 5. 
 tautology :: Eq a => Wff a -> Bool
 tautology str = and [eval x str | x <- envs $ atoms str]
@@ -236,10 +238,10 @@ isNNF _                  = False
 -- 11.
 -- convert to negation normal form
 impElim :: Wff a -> Wff a
-impElim (Not (a) :|: Not(b)) = (Not(a :&: b))
-impElim (Not (a) :&: Not(b)) = (Not(a :|: b))
-impElim (Not (a) :|: b) = (a :->: b) 
-impElim (((a :->: b) :&: (b :->: a))) = (a :<->: b)
+--impElim (Not (a) :|: Not(b)) = (Not(a :&: b))
+--impElim (Not (a) :&: Not(b)) = (Not(a :|: b))
+--impElim (Not (a) :|: b) = (a :->: b) 
+--impElim (((a :->: b) :&: (b :->: a))) = (a :<->: b)
 impElim  a = (Not(Not(a)))
 
 toNNF :: Wff a -> Wff a
